@@ -1,0 +1,33 @@
+C:\Users\МИША\Desktop\Termo6\Termo\bin\Release\Termo.exe.config
+C:\Users\МИША\Desktop\Termo6\Termo\bin\Release\Termo.exe
+C:\Users\МИША\Desktop\Termo6\Termo\bin\Release\Termo.pdb
+C:\Users\МИША\Desktop\Termo6\Termo\bin\Release\OxyPlot.dll
+C:\Users\МИША\Desktop\Termo6\Termo\bin\Release\OxyPlot.WindowsForms.dll
+C:\Users\МИША\Desktop\Termo6\Termo\bin\Release\System.Web.DataVisualization.Design.dll
+C:\Users\МИША\Desktop\Termo6\Termo\bin\Release\System.Web.DataVisualization.dll
+C:\Users\МИША\Desktop\Termo6\Termo\bin\Release\System.Windows.Forms.DataVisualization.Design.dll
+C:\Users\МИША\Desktop\Termo6\Termo\bin\Release\System.Windows.Forms.DataVisualization.dll
+C:\Users\МИША\Desktop\Termo6\Termo\bin\Release\OxyPlot.pdb
+C:\Users\МИША\Desktop\Termo6\Termo\bin\Release\OxyPlot.xml
+C:\Users\МИША\Desktop\Termo6\Termo\bin\Release\OxyPlot.WindowsForms.pdb
+C:\Users\МИША\Desktop\Termo6\Termo\bin\Release\OxyPlot.WindowsForms.xml
+C:\Users\МИША\Desktop\Termo6\Termo\obj\Release\Termo.csprojResolveAssemblyReference.cache
+C:\Users\МИША\Desktop\Termo6\Termo\obj\Release\Termo.TermoMainForm.resources
+C:\Users\МИША\Desktop\Termo6\Termo\obj\Release\Termo.Properties.Resources.resources
+C:\Users\МИША\Desktop\Termo6\Termo\obj\Release\Termo.csproj.GenerateResource.Cache
+C:\Users\МИША\Desktop\Termo6\Termo\obj\Release\Termo.exe
+C:\Users\МИША\Desktop\Termo6\Termo\obj\Release\Termo.pdb
+D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\bin\Release\Termo.exe.config
+D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\bin\Release\Termo.exe
+D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\bin\Release\Termo.pdb
+D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\bin\Release\System.Web.DataVisualization.Design.dll
+D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\bin\Release\System.Web.DataVisualization.dll
+D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\bin\Release\System.Windows.Forms.DataVisualization.Design.dll
+D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\bin\Release\System.Windows.Forms.DataVisualization.dll
+D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\obj\Release\Termo.TermoMainForm.resources
+D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\obj\Release\Termo.Properties.Resources.resources
+D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\obj\Release\Termo.csproj.GenerateResource.cache
+D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\obj\Release\Termo.csproj.CoreCompileInputs.cache
+D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\obj\Release\Termo.csproj.CopyComplete
+D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\obj\Release\Termo.exe
+D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\obj\Release\Termo.pdb
