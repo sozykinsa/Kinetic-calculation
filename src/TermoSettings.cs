@@ -6,46 +6,26 @@ using System.Threading.Tasks;
 using System.Configuration;
 using System.Xml;
 using System.Windows.Forms;
-using System.IO;
 
 namespace Termo
 {
-    public  class TermoSettings  
-                                 
-                                 
+    public  class TermoSettings
     {
-        public Configuration  Config=null;
-        public ClientSettingsSection Termosection=null;
-        public int RowCnt=0;         
-        public int ColCnt=0;         
-        public bool isAutoLoad = false;
-        public string LeftCursor="44", RightCursor="100";
 
-        public TermoSettings()   
-        {
-            try   
-            {
-                Config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                Termosection = (ClientSettingsSection)Config.GetSectionGroup("Termo.InitFiles").Sections["Termo.Properties.Settings"];
-                isAutoLoad = true;
-                LeftCursor= Properties.Settings.Default.LefCursorValue;
-                RightCursor= Properties.Settings.Default.RightCursorValue;
-            }
-            catch
-            {
-                Config = null;  isAutoLoad = false;    
-            }
+        public int RowCnt=0;
+        public int ColCnt=0;
+//        public bool isAutoLoad = false;
+
+        public TermoSettings()
+        {   
 
         }
-        public void LoadCursorSettings(Label Left, Label Right)
-        {
-            Left.Text = LeftCursor;
-            Right.Text = RightCursor;
-        }
 
-        public bool SetDataGridInfo(DataGridView dg)     
-             
+        public bool SetDataGridInfo(DataGridView dg)
         {
+            Configuration Config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            ClientSettingsSection Termosection = (ClientSettingsSection)Config.GetSectionGroup("Termo.InitFiles").Sections["Termo.Properties.Settings"];
+
             if (Config != null)
             {
                 dg.Rows.Clear(); dg.Columns.Clear();
@@ -65,59 +45,18 @@ namespace Termo
                             dg.Rows.Add(new DataGridViewRow());
                         }
                         bool flgset = false;
-                         
-
+                        //Termosection = (ClientSettingsSection)Config.GetSectionGroup("Termo.InitFiles").Sections["Termo.Properties.Settings"];
                         for (int k=0; k< RowCnt; k++)
                         {
                             for (int j=0; j<ColCnt; j++)
                             {
                                 var C_str = Termosection.Settings.Get(Convert.ToString(k)+'_'+Convert.ToString(j));
-                                if (C_str != null && File.Exists(C_str.Value.ValueXml.InnerText))
+                                if (C_str != null)
                                 {
                                     dg[j,k].Value= C_str.Value.ValueXml.InnerText; ;flgset = true;
                                 }
                             }
                         }
-
-                         
-                        bool isSet = false;
-                        for (int i = RowCnt - 1; i >= 0; i--)
-                        {
-                            for (int j=0; j<ColCnt; j++)
-                            {
-                                if (Convert.ToString(dg[j, i].Value) != "")
-                                {
-                                    isSet = true;
-                                }
-                                else
-                                {   
-                                    Termosection.Settings.Remove(Termosection.Settings.Get(Convert.ToString(i) + '_' + Convert.ToString(j)));
-                                }
-                            }
-                            if (!isSet)
-                            { DataGridViewRow delrow = dg.Rows[i]; dg.Rows.Remove(delrow);
-                              RowCnt = RowCnt - 1;
-                            }
-                        }
-                        Properties.Settings.Default.InitRowCount = RowCnt;
-                         
-                        isSet = false;
-                        for (int i = ColCnt - 1; i >= 0; i--)
-                        {
-                            for (int j = 0; j < RowCnt; j++)
-                            {
-                                if (Convert.ToString(dg[i, j].Value) != "")
-                                {
-                                    isSet = true; break;
-                                }
-                            }
-                                if (!isSet)
-                                {
-                                    DataGridViewColumn delcol = dg.Columns[i]; dg.Columns.Remove(delcol);
-                                    ColCnt = ColCnt - 1;
-                                }
-                        }
-                        Properties.Settings.Default.InitRowCount = RowCnt;
                         return flgset;
                     }
                     else
@@ -127,7 +66,7 @@ namespace Termo
                 }
                 catch (Exception e)
                 {
-                    ClearDataGrid(dg); return false;   
+                    ClearDataGrid(dg); return false;
                 }
             }
             else
@@ -136,8 +75,11 @@ namespace Termo
             }
         }
         
-        public void ClearDataGrid(DataGridView dg)       
+        public void ClearDataGrid(DataGridView dg)
         {
+            Configuration Config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            ClientSettingsSection Termosection = (ClientSettingsSection)Config.GetSectionGroup("Termo.InitFiles").Sections["Termo.Properties.Settings"];
+
             dg.Rows.Clear();
             dg.Columns.Clear();
             dg.Columns.Add("col0", "... K/min");
@@ -149,44 +91,42 @@ namespace Termo
             ConfigurationManager.RefreshSection("Termo.InitFiles/Termo.Properties.Settings");
         }
 
-        public void GetDataGridInfo(DataGridView dg,Label LeftCursor, Label RightCursor)   
+        public void GetDataGridInfo(DataGridView dg)  //cохраняет состояние DataGridView в .config
         {
-            if (isAutoLoad)
-            {
-                RowCnt = dg.Rows.Count - 1; ColCnt = dg.Columns.Count - 1;
-                Properties.Settings.Default.InitRowCount = RowCnt;
-                Properties.Settings.Default.InitColumnCount = ColCnt;
-                Properties.Settings.Default.LefCursorValue = LeftCursor.Text;
-                Properties.Settings.Default.RightCursorValue = RightCursor.Text;
+            Configuration Config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            ClientSettingsSection Termosection = (ClientSettingsSection)Config.GetSectionGroup("Termo.InitFiles").Sections["Termo.Properties.Settings"];
 
-                for (int i = 0; i < dg.Rows.Count; i++)
-                    for (int j = 0; j < dg.Columns.Count; j++)
+            RowCnt = dg.Rows.Count - 1;  ColCnt = dg.Columns.Count-1;
+            Properties.Settings.Default.InitRowCount = RowCnt;
+            Properties.Settings.Default.InitColumnCount = ColCnt;
+            for (int i=0; i<dg.Rows.Count; i++)
+                for (int j=0; j<dg.Columns.Count;j++)
+                {
+                    if (dg[j,i].Value != null)
                     {
-                        if (dg[j, i].Value != null)
+                        // получаем значение параметра Str
+                        string Key = Convert.ToString(i) + '_' + Convert.ToString(j);
+                        var C_str = Termosection.Settings.Get(Key);
+                        if (C_str != null)
                         {
-                             
-                            string Key = Convert.ToString(i) + '_' + Convert.ToString(j);
-                            var C_str = Termosection.Settings.Get(Key);
-                            if (C_str != null)
-                            {
-                                Termosection.Settings.Remove(C_str);
-                            }
-
-                             
-                            var newSetting = new SettingElement(Key, SettingsSerializeAs.String);
-                            newSetting.Value = new SettingValueElement();
-                            newSetting.Value.ValueXml = new XmlDocument().CreateElement("value");
-                            newSetting.Value.ValueXml.InnerText = (string)dg[j, i].Value;
-
-                             
-
-                            Termosection.Settings.Add(newSetting);
+                            Termosection.Settings.Remove(C_str);
                         }
+
+                        // вручную создаем параметр с новым значением
+                        var newSetting = new SettingElement(Key, SettingsSerializeAs.String);
+                        newSetting.Value = new SettingValueElement();
+                        newSetting.Value.ValueXml = new XmlDocument().CreateElement("value");
+                        newSetting.Value.ValueXml.InnerText = (string)dg[j,i].Value;
+
+                        // заменяем старый параметр на новый
+
+                        Termosection.Settings.Add(newSetting);
                     }
-                Config.Save();
-                ConfigurationManager.RefreshSection("Termo.InitFiles/Termo.Properties.Settings");
-                Properties.Settings.Default.Save();
-            }
+                }
+
+            Config.Save();
+            ConfigurationManager.RefreshSection("Termo.InitFiles/Termo.Properties.Settings");
+            Properties.Settings.Default.Save();
         }
     }
 }

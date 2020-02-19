@@ -63,9 +63,9 @@ namespace Termo.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Conversion_equation {
+        internal static System.Drawing.Bitmap Al {
             get {
-                object obj = ResourceManager.GetObject("Conversion equation", resourceCulture);
+                object obj = ResourceManager.GetObject("Al", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,79 @@ namespace Termo.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap equation {
+        internal static System.Drawing.Bitmap DAldT {
             get {
-                object obj = ResourceManager.GetObject("equation", resourceCulture);
+                object obj = ResourceManager.GetObject("DAldT", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Energy {
+            get {
+                object obj = ResourceManager.GetObject("Energy", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap label {
+            get {
+                object obj = ResourceManager.GetObject("label", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap label1 {
+            get {
+                object obj = ResourceManager.GetObject("label1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SUSU {
+            get {
+                object obj = ResourceManager.GetObject("SUSU", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TGAv100 {
+            get {
+                object obj = ResourceManager.GetObject("TGAv100", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Уравнение {
+            get {
+                object obj = ResourceManager.GetObject("Уравнение", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Уравнение_конверсии {
+            get {
+                object obj = ResourceManager.GetObject("Уравнение конверсии", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

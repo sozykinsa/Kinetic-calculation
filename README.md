@@ -20,6 +20,17 @@ out according to the methodology of Vyazovsky, Ozawa.
 5. The program allows you to upload the calculated data. To do this, right-click on the resulting graph in the right part 
 of the program window.
 
+The program allows you to configure the format of input files through the "Input file format" tab. The tab allows you to specify the column 
+numbers of the input files. Numbering from left to right. It starts with one. The separator between the columns can 
+be any combination of spaces, tabs, semicolons.
+
+On the "Calculation" tab, two vertical lines are displayed on the left figures. The lines allow you to set the temperature range for that 
+the calculation is performed. Lines can be moved with the mouse.
+
+The program allows you to export the calculation results in graphical format and in numerical data.
+The export menu is called up with the right mouse button in the area of ​​the graph of the result 
+(two graphs on the right part of the "Calculation" tab).
+
 
 We would be grateful for feedback on program "Kinetic Calculation".
 

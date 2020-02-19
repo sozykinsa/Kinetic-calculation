@@ -135,6 +135,23 @@
   <metadata name="Speed01.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <data name="richTextBox1.Text" xml:space="preserve">
+    <value>This tab allows you to specify the column numbers of the input files. Numbering from left to right. It starts with one. The separator between the columns can be any combination of spaces, tabs, semicolons.</value>
+  </data>
+  <metadata name="comboBox2.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="richTextBox2.Text" xml:space="preserve">
+    <value>This program allows us to calculate kinetic triplets by the method Vyazovkin's and the method of Ozawa-Flynn-Wall. 
+
+Team development programs:
+1. Dmitry Drozin, 		Mathematician-programmer, 	drozinda@susu.ru
+2. Sergey Sozykin, 		Physicist-programmer, sozykinsa@susu.ru
+3. Tatyana Krupnova, The owner of the product
+4. Natalia Ivanova, 		Mathematician, ivanovand@susu.ru
+5. Tatyana Olenchikova, 	Programmer, 	olenchikovati@susu.ru
+6. Natalia Krupina, Sсram Master, krupinanv@susu.ru</value>
+  </data>
   <metadata name="saveDataDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>779, 17</value>
   </metadata>
@@ -142,7 +159,7 @@
     <value>915, 17</value>
   </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>54</value>
+    <value>53</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

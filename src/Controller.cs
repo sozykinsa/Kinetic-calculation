@@ -45,20 +45,8 @@ namespace Termo
     {
         private Model TermoModel;
 
-      //  private View TermoView;
-
         List<DataDSC> Data = new List<DataDSC>();
         List<DataTg> DataTg = new List<DataTg>();
-
-        public void ViewDSC()
-        {
-         ///   TermoView.ShowDCSInit(Data);
-        }
-
-        public void ViewTg()
-        {
-           // TermoView.ShowTgInit(DataTg);
-        }
         
         public void ReadDSC(string FileName)
         {
@@ -96,8 +84,7 @@ namespace Termo
             using (StreamReader streamReader = new StreamReader(fs, Encoding.ASCII))
             {
                 string line = String.Empty;
-               // while (((line = streamReader.ReadLine()) != null) && (line.StartsWith("##") == false)) ;
-
+ 
                 while (((line = streamReader.ReadLine()) != null) && (line != ""))
                 {
                     line = System.Text.RegularExpressions.Regex.Replace(line, @"\s+", " "); // удаляем лишние пробелы

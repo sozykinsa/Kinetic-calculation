@@ -156,73 +156,52 @@ C:\Users\Dima\Desktop\Проект\Программа на С#\Termo4\Termo\obj\
 C:\Users\Dima\Desktop\Проект\Программа на С#\Termo4\Termo\obj\Debug\Termo.csproj.CopyComplete
 C:\Users\Dima\Desktop\Проект\Программа на С#\Termo4\Termo\obj\Debug\Termo.exe
 C:\Users\Dima\Desktop\Проект\Программа на С#\Termo4\Termo\obj\Debug\Termo.pdb
-C:\Users\МИША\Desktop\Termo6\Termo\bin\Debug\Termo.exe.config
-C:\Users\МИША\Desktop\Termo6\Termo\obj\Debug\Termo.exe
-C:\Users\МИША\Desktop\Termo6\Termo\obj\Debug\Termo.pdb
-C:\Users\МИША\Desktop\Termo6\Termo\bin\Debug\Termo.exe
-C:\Users\МИША\Desktop\Termo6\Termo\bin\Debug\Termo.pdb
-C:\Users\МИША\Desktop\Termo6\Termo\bin\Debug\OxyPlot.dll
-C:\Users\МИША\Desktop\Termo6\Termo\bin\Debug\OxyPlot.WindowsForms.dll
-C:\Users\МИША\Desktop\Termo6\Termo\bin\Debug\System.Web.DataVisualization.Design.dll
-C:\Users\МИША\Desktop\Termo6\Termo\bin\Debug\System.Web.DataVisualization.dll
-C:\Users\МИША\Desktop\Termo6\Termo\bin\Debug\System.Windows.Forms.DataVisualization.Design.dll
-C:\Users\МИША\Desktop\Termo6\Termo\bin\Debug\System.Windows.Forms.DataVisualization.dll
-C:\Users\МИША\Desktop\Termo6\Termo\bin\Debug\OxyPlot.pdb
-C:\Users\МИША\Desktop\Termo6\Termo\bin\Debug\OxyPlot.xml
-C:\Users\МИША\Desktop\Termo6\Termo\bin\Debug\OxyPlot.WindowsForms.pdb
-C:\Users\МИША\Desktop\Termo6\Termo\bin\Debug\OxyPlot.WindowsForms.xml
-C:\Users\МИША\Desktop\Termo6\Termo\obj\Debug\Termo.csprojResolveAssemblyReference.cache
-C:\Users\МИША\Desktop\Termo6\Termo\obj\Debug\Termo.TermoMainForm.resources
-C:\Users\МИША\Desktop\Termo6\Termo\obj\Debug\Termo.Properties.Resources.resources
-C:\Users\МИША\Desktop\Termo6\Termo\obj\Debug\Termo.csproj.GenerateResource.Cache
-C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo6\Termo\obj\Debug\Termo.csprojAssemblyReference.cache
-C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo6\Termo\obj\Debug\Termo.exe
-C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo6\Termo\obj\Debug\Termo.pdb
-C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo6\Termo\bin\Debug\Termo.exe.config
-C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo6\Termo\bin\Debug\Termo.exe
-C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo6\Termo\bin\Debug\Termo.pdb
-C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo6\Termo\bin\Debug\OxyPlot.dll
-C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo6\Termo\bin\Debug\OxyPlot.WindowsForms.dll
-C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo6\Termo\bin\Debug\System.Windows.Forms.DataVisualization.dll
-C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo6\Termo\bin\Debug\OxyPlot.pdb
-C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo6\Termo\bin\Debug\OxyPlot.xml
-C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo6\Termo\bin\Debug\OxyPlot.WindowsForms.pdb
-C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo6\Termo\bin\Debug\OxyPlot.WindowsForms.xml
-C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo6\Termo\obj\Debug\Termo.TermoMainForm.resources
-C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo6\Termo\obj\Debug\Termo.Properties.Resources.resources
-C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo6\Termo\obj\Debug\Termo.csproj.GenerateResource.cache
-C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo6\Termo\obj\Debug\Termo.csproj.CoreCompileInputs.cache
-C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo6\Termo\obj\Debug\Termo.csproj.CopyComplete
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\bin\Debug\Termo.exe.config
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\bin\Debug\Termo.exe
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\bin\Debug\Termo.pdb
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\bin\Debug\System.Web.DataVisualization.Design.dll
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\bin\Debug\System.Web.DataVisualization.dll
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\bin\Debug\System.Windows.Forms.DataVisualization.Design.dll
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\bin\Debug\System.Windows.Forms.DataVisualization.dll
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\bin\Debug\OxyPlot.pdb
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\bin\Debug\OxyPlot.xml
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\bin\Debug\OxyPlot.WindowsForms.pdb
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\bin\Debug\OxyPlot.WindowsForms.xml
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\obj\Debug\Termo.csprojAssemblyReference.cache
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\obj\Debug\Termo.TermoMainForm.resources
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\obj\Debug\Termo.Properties.Resources.resources
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\obj\Debug\Termo.csproj.GenerateResource.cache
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\obj\Debug\Termo.csproj.CoreCompileInputs.cache
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\obj\Debug\Termo.csproj.CopyComplete
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\obj\Debug\Termo.exe
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\obj\Debug\Termo.pdb
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\bin\Debug\Termo.exe.config
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\bin\Debug\Termo.exe
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\bin\Debug\Termo.pdb
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\bin\Debug\System.Web.DataVisualization.Design.dll
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\bin\Debug\System.Web.DataVisualization.dll
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\bin\Debug\System.Windows.Forms.DataVisualization.Design.dll
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\bin\Debug\System.Windows.Forms.DataVisualization.dll
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\obj\Debug\Termo.TermoMainForm.resources
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\obj\Debug\Termo.Properties.Resources.resources
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\obj\Debug\Termo.csproj.GenerateResource.cache
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\obj\Debug\Termo.csproj.CoreCompileInputs.cache
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\obj\Debug\Termo.csproj.CopyComplete
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\obj\Debug\Termo.exe
-D:\Дима\Проект Термический Анализ Авдин В.В\Для статьи\KineticCalculation\KineticCalculation\obj\Debug\Termo.pdb
+C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo\bin\Debug\Termo.exe.config
+C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo\bin\Debug\Termo.exe
+C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo\bin\Debug\Termo.pdb
+C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo\bin\Debug\System.Windows.Forms.DataVisualization.dll
+C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo\obj\Debug\Termo.csprojAssemblyReference.cache
+C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo\obj\Debug\Termo.TermoMainForm.resources
+C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo\obj\Debug\Termo.Properties.Resources.resources
+C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo\obj\Debug\Termo.csproj.GenerateResource.cache
+C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo\obj\Debug\Termo.csproj.CoreCompileInputs.cache
+C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo\obj\Debug\Termo.csproj.CopyComplete
+C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo\obj\Debug\Termo.exe
+C:\Users\Dima\Desktop\Проект\Программа на С#\Termo6\Termo\obj\Debug\Termo.pdb
+C:\Users\lucky_000\Desktop\Dropbox (Личный)\Termo6\Termo\bin\Debug\Termo.exe.config
+C:\Users\lucky_000\Desktop\Dropbox (Личный)\Termo6\Termo\obj\Debug\Termo.exe
+C:\Users\lucky_000\Desktop\Dropbox (Личный)\Termo6\Termo\obj\Debug\Termo.pdb
+C:\Users\lucky_000\Desktop\Dropbox (Личный)\Termo6\Termo\bin\Debug\Termo.exe
+C:\Users\lucky_000\Desktop\Dropbox (Личный)\Termo6\Termo\bin\Debug\Termo.pdb
+C:\Users\lucky_000\Desktop\Dropbox (Личный)\Termo6\Termo\bin\Debug\OxyPlot.dll
+C:\Users\lucky_000\Desktop\Dropbox (Личный)\Termo6\Termo\bin\Debug\OxyPlot.WindowsForms.dll
+C:\Users\lucky_000\Desktop\Dropbox (Личный)\Termo6\Termo\bin\Debug\System.Web.DataVisualization.Design.dll
+C:\Users\lucky_000\Desktop\Dropbox (Личный)\Termo6\Termo\bin\Debug\System.Web.DataVisualization.dll
+C:\Users\lucky_000\Desktop\Dropbox (Личный)\Termo6\Termo\bin\Debug\System.Windows.Forms.DataVisualization.Design.dll
+C:\Users\lucky_000\Desktop\Dropbox (Личный)\Termo6\Termo\bin\Debug\System.Windows.Forms.DataVisualization.dll
+C:\Users\lucky_000\Desktop\Dropbox (Личный)\Termo6\Termo\bin\Debug\OxyPlot.pdb
+C:\Users\lucky_000\Desktop\Dropbox (Личный)\Termo6\Termo\bin\Debug\OxyPlot.xml
+C:\Users\lucky_000\Desktop\Dropbox (Личный)\Termo6\Termo\bin\Debug\OxyPlot.WindowsForms.pdb
+C:\Users\lucky_000\Desktop\Dropbox (Личный)\Termo6\Termo\bin\Debug\OxyPlot.WindowsForms.xml
+C:\Users\lucky_000\Desktop\Dropbox (Личный)\Termo6\Termo\obj\Debug\Termo.csprojResolveAssemblyReference.cache
+C:\Users\lucky_000\Desktop\Dropbox (Личный)\Termo6\Termo\obj\Debug\Termo.TermoMainForm.resources
+C:\Users\lucky_000\Desktop\Dropbox (Личный)\Termo6\Termo\obj\Debug\Termo.Properties.Resources.resources
+C:\Users\lucky_000\Desktop\Dropbox (Личный)\Termo6\Termo\obj\Debug\Termo.csproj.GenerateResource.Cache
+C:\Users\1\Downloads\Для размещения на сайт\Termo\bin\Debug\Termo.exe.config
+C:\Users\1\Downloads\Для размещения на сайт\Termo\obj\Debug\Termo.exe
+C:\Users\1\Downloads\Для размещения на сайт\Termo\obj\Debug\Termo.pdb
+D:\Dropbox\Science-sorted\Avdin\Termo\bin\Debug\Termo.exe.config
+D:\Dropbox\Science-sorted\Avdin\Termo\bin\Debug\Termo.exe
+D:\Dropbox\Science-sorted\Avdin\Termo\bin\Debug\Termo.pdb
+D:\Dropbox\Science-sorted\Avdin\Termo\bin\Debug\System.Web.DataVisualization.Design.dll
+D:\Dropbox\Science-sorted\Avdin\Termo\bin\Debug\System.Web.DataVisualization.dll
+D:\Dropbox\Science-sorted\Avdin\Termo\bin\Debug\System.Windows.Forms.DataVisualization.Design.dll
+D:\Dropbox\Science-sorted\Avdin\Termo\bin\Debug\System.Windows.Forms.DataVisualization.dll
+D:\Dropbox\Science-sorted\Avdin\Termo\obj\Debug\Termo.csprojAssemblyReference.cache
+D:\Dropbox\Science-sorted\Avdin\Termo\obj\Debug\Termo.TermoMainForm.resources
+D:\Dropbox\Science-sorted\Avdin\Termo\obj\Debug\Termo.Properties.Resources.resources
+D:\Dropbox\Science-sorted\Avdin\Termo\obj\Debug\Termo.csproj.GenerateResource.cache
+D:\Dropbox\Science-sorted\Avdin\Termo\obj\Debug\Termo.csproj.CoreCompileInputs.cache
+D:\Dropbox\Science-sorted\Avdin\Termo\obj\Debug\Termo.csproj.CopyComplete
+D:\Dropbox\Science-sorted\Avdin\Termo\obj\Debug\Termo.exe
+D:\Dropbox\Science-sorted\Avdin\Termo\obj\Debug\Termo.pdb

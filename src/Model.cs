@@ -3,17 +3,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+//using System.Threading.Tasks;
 using System.Globalization;
 using System.Windows.Forms;
+using System.Configuration;
 
 namespace Termo
 {
-    abstract class SignalObject 
+    abstract class SignalObject
     {
         public struct LineParams
         {
             public double Betta;
             public double T0;
+            public double Tstart;
+            public double Tend;
             public double dT;
         };
 
@@ -21,7 +25,9 @@ namespace Termo
         {
             LineParams res;
             res.Betta = 0;
-            res.T0 = 0;
+            res.T0 = y[0];
+            res.Tend = y[y.Length - 1];
+            res.Tstart = y[0];
             res.dT = 0;
 
             if (x.Length > 0)
@@ -34,8 +40,6 @@ namespace Termo
                     Y += y[i];
                     XY += x[i] * y[i];
                 }
-
-
                 res.Betta = (XY * x.Length - X * Y) / (x.Length * XX - X * X);
                 res.T0 = (Y - res.Betta * X) / x.Length;
                 res.dT = (x[x.Length - 1] - x[0]) / (x.Length - 1);
@@ -44,7 +48,7 @@ namespace Termo
             return res;
         }
     }
-    class Signal : SignalObject   
+    class Signal : SignalObject
     {
         double[] Array;
         public Signal(double[] _D)
@@ -57,29 +61,25 @@ namespace Termo
             get { return Array; }
         }
     };
-
-    class SimpleSignal : SignalObject   
-                                        
-                                        
-                                        
-                                        
-                                        
+    class SimpleSignal : SignalObject
     {
         Dictionary<string, int> Keys;
         public double Betta;
         public double T0;
+        public double Tstart;
+        public double Tend;
         public double dT;
         Signal[] DataArray;
         int[] DataIndex;
 
-        public double[] GetSignal(string attr)   
+        public double[] GetSignal(string attr)
         {
             return DataArray[Keys[attr]].array;
         }
 
         string inputFile;
 
-        public SimpleSignal(string inp, Dictionary<string, int> _Keys, int[] _DataIndex)  
+        public SimpleSignal(string inp, Dictionary<string, int> _Keys, int[] _DataIndex)
         {
             inputFile = inp;
             Keys = _Keys;
@@ -87,8 +87,7 @@ namespace Termo
             Load(DataIndex);
         }
 
-
-        void CulcParams()        
+        void CulcParams()
         {
             double[] x = DataArray[Keys["t"]].array;
             double[] y = DataArray[Keys["T"]].array;
@@ -98,9 +97,11 @@ namespace Termo
             Betta = param.Betta;
             T0 = param.T0;
             dT = param.dT;
+            Tstart = param.Tstart;
+            Tend = param.Tend;
         }
 
-        private void Load(int[] DataIndex)       
+        private void Load(int[] DataIndex)
         {
             List<List<double>> Data;
             FileStream fs = new FileStream(inputFile, FileMode.Open, FileAccess.Read);
@@ -108,7 +109,10 @@ namespace Termo
             if (fs == null) return;
 
             Data = new List<List<double>>();
-            for (int i = 0; i < DataIndex.Length; i++)
+
+            int Cur = DataIndex.Length;                             // Количество необходимых столбцов
+            if (DataIndex[DataIndex.Length - 1] == -1) Cur--;
+            for (int i = 0; i < Cur; i++)
                 Data.Add(new List<double>());
 
             CultureInfo culture = new CultureInfo("en-us");
@@ -116,16 +120,16 @@ namespace Termo
             {
                 string line = String.Empty;
                 while ((line = streamReader.ReadLine()) != null)
-
-                 
                 {
                     if (line.StartsWith("#") || line == string.Empty) continue;
-                    line = System.Text.RegularExpressions.Regex.Replace(line, @"\s+", " ");  
+                    line = line.Replace(';', ' ');
+                    //line = line.Replace(',', ' ');
+                    line = System.Text.RegularExpressions.Regex.Replace(line, @"\s+", " "); // удаляем лишние пробелы
                     line = line.Trim();
                     string[] arr = line.Split();
-                    for (int i = 0; i < DataIndex.Length; i++)
+                    for (int i = 0; i < Cur; i++)
                     {
-                        Data[i].Add(double.Parse(arr[i], culture.NumberFormat));
+                        Data[i].Add(double.Parse(arr[DataIndex[i]], culture.NumberFormat));
                     }
                 }
             }
@@ -140,48 +144,42 @@ namespace Termo
         }
     }
 
-    class Model : SignalObject       
-                                     
-                                     
-                                     
-                                     
-                                     
+    class Model : SignalObject
     {
         const double R = 8.3144598;
-        const double K = 273.15;     
-        const double KK = 1000;     
+        const double K = 273.15;    //Перевод в кельвин
+        const double KK = 1000;    //Перевод в килоджоули
+        int[] DataIndex;
 
         Dictionary<string, int> Keys;
-        List<List<SimpleSignal>> ModelSignals;   
+        List<List<SimpleSignal>> ModelSignals;
         List<List<double>> Ycalc, Yteor;
         AVGModel AVG;
 
-        double VyazovkinE0, OzawaE0, FridmanE0,   
+        double VyazovkinE0, OzawaE0, FridmanE0,
                Model_n, Model_m, Model_p,
-               VyazovkinA, VyazovkinError;
+               VyazovkinA, VyazovkinError,
+               TemperatureRangeLeft, TemperatureRangeRight;
 
-
-        List<List<Signal>> ResultSignals;  
+        List<List<Signal>> ResultSignals;
         List<List<double>> VyazovkinE, OzawaE, FridmanE;
         List<double> alpha;
         List<int> func;
 
         ViewSignal ViewTG, ViewE, ViewAlpha, ViewEHidd, ViewAlphaHidd;
 
-        public Model(List<List<string>> paths, Dictionary<string, int> _Keys, ViewSignal _ViewTG, ViewSignal _ViewE, ViewSignal _ViewAlpha, ViewSignal _ViewEHidd, ViewSignal _ViewAlphaHidd)  
-                         
+        public Model(List<List<string>> paths, Dictionary<string, int> _Keys, ViewSignal _ViewTG, ViewSignal _ViewE, ViewSignal _ViewAlpha, ViewSignal _ViewEHidd, ViewSignal _ViewAlphaHidd, int[] _DataIndex) // скорость <эксперимент>
         {
             ViewTG = _ViewTG;
-
             ViewE = _ViewE;
             ViewAlpha = _ViewAlpha;
-
             ViewEHidd = _ViewEHidd;
             ViewAlphaHidd = _ViewAlphaHidd;
+            DataIndex = _DataIndex;
 
-            int[] DataIndex = { 0, 1, 2, 3 };
             Keys = _Keys;
             ModelSignals = new List<List<SimpleSignal>>();
+
             foreach (List<string> P in paths)
             {
                 List<SimpleSignal> newSignalList = new List<SimpleSignal>();
@@ -190,9 +188,25 @@ namespace Termo
                 ModelSignals.Add(newSignalList);
             }
 
-            double startT = Tmin();
-            double endT = Tmax();
-            AVG = new AVGModel(this, startT, endT);
+            double dBetta = 0;
+            bool bFlag = true;
+
+            for (int i = 0; i < ModelSignals.Count; i++)
+            {
+                if (bFlag || ModelSignals[i][0].Betta > dBetta)
+                {
+                    dBetta = ModelSignals[i][0].Betta;
+                    TemperatureRangeLeft = ModelSignals[i][0].Tstart;
+                    TemperatureRangeRight = ModelSignals[i][0].Tend;
+                    bFlag = false;
+                }
+            }
+
+            double Tstart = Tmin(), Tend = Tmax();
+
+            AVG = new AVGModel(this, TemperatureRangeLeft, TemperatureRangeRight, DataIndex);
+            TemperatureRangeRight = Math.Ceiling((TemperatureRangeRight - TemperatureRangeLeft) * 0.25);
+
         }
         public List<double> GetBetta()
         {
@@ -202,7 +216,6 @@ namespace Termo
                 BettaList.Add(AVG.GetBetta(i));
             return BettaList;
         }
-
         public List<double> GetBettaGrid()
         {
             List<double> BettaList = new List<double>();
@@ -222,20 +235,16 @@ namespace Termo
             double[] xOzawa = OzawaE[0].ToArray();
             double[] yOzawa = OzawaE[1].ToArray();
             ViewE.Add(xOzawa, yOzawa, "Ozawa-Flynn-Wall");
-#if Fredman
-            double[] xFridman = FridmanE[0].ToArray();
-            double[] yFridman = FridmanE[1].ToArray();
-            ViewE.Add(xFridman, yFridman, "Fridman");
-#endif
+            /*
+                        double[] xFridman = FridmanE[0].ToArray();
+                        double[] yFridman = FridmanE[1].ToArray();
+                        ViewE.Add(xFridman, yFridman, "Fridman");
+            */
             ViewEHidd.Clear();
             ViewEHidd.Add(xVyazovkin, yVyazovkin, "Vyazovkin");
             ViewEHidd.Add(xOzawa, yOzawa, "Ozawa-Flynn-Wall");
-#if Fredman
-            ViewEHidd.Add(xFridman, yFridman, "Fridman");
-#endif
+            //   ViewEHidd.Add(xFridman, yFridman, "Fridman");
         }
-
-
         public void plotDAlvsAl()
         {
             ViewAlpha.Clear();
@@ -251,7 +260,6 @@ namespace Termo
             ViewAlphaHidd.Add(x, y, "Calc");
             ViewAlphaHidd.Add(xt, yt, "Teor");
         }
-
         public string GetError()
         {
             return Math.Round(VyazovkinError, 2).ToString();
@@ -268,31 +276,34 @@ namespace Termo
         {
             return Math.Round(FridmanE0, 2).ToString();
         }
-
         public string GetVyazovkinA()
         {
             return Math.Round(VyazovkinA, 2).ToString();
         }
         public string Getn()
         {
-            return Math.Round(Model_n, 2).ToString();
+            return Math.Round(Model_n, 3).ToString();
         }
         public string Getm()
         {
-            return Math.Round(Model_m, 2).ToString();
+            return Math.Round(Model_m, 3).ToString();
         }
         public string Getp()
         {
-            return Math.Round(Model_p, 2).ToString();
+            return Math.Round(Model_p, 3).ToString();
         }
-
-        public void plotTG_DTG_DTF()
+        public void plotTG_DTG_DTF(int[] _DataIndex)
         {
             for (int i = 0; i < AVG.CountSpeeds(); i++)
-                ViewTG.Add(AVG.GetSignal("T", i), AVG.GetSignal("TG", i), AVG.GetSignal("DTA", i), AVG.GetSignal("DTG", i));
+            {
+                if (_DataIndex[3] != -1)
+                {
+                    ViewTG.Add(AVG.GetSignal("T", i), AVG.GetSignal("TG", i), AVG.GetSignal("DTA", i), AVG.GetSignal("DTG", i));
+                    continue;
+                }
+                ViewTG.Add(AVG.GetSignal("T", i), AVG.GetSignal("TG", i), null, AVG.GetSignal("DTG", i));
+            }
         }
-
-
         public double TminPlot()
         {
             double min = AVG.GetSignal("T", 0)[0];
@@ -301,26 +312,21 @@ namespace Termo
             return min;
         }
 
-
         public double TmaxPlot()
         {
-            double max = AVG.GetSignal("T", 0)[AVG.GetSignal("T", 0).Length-1];
+            double max = AVG.GetSignal("T", 0)[AVG.GetSignal("T", 0).Length - 1];
             for (int i = 1; i < AVG.CountSpeeds(); i++)
                 if (AVG.GetSignal("T", i)[AVG.GetSignal("T", i).Length - 1] < max) max = AVG.GetSignal("T", i)[AVG.GetSignal("T", i).Length - 1];
             return max;
         }
 
-        public Dictionary<string, int> keys
-        {
-            set { Keys = value; }
-        }
         public List<SimpleSignal> this[int i]
         {
             get { return ModelSignals[i]; }
         }
         public void Close()
         {
-             
+            //
             Keys = null;
             ModelSignals = null;
 
@@ -338,6 +344,15 @@ namespace Termo
         {
             get { return ModelSignals.Count; }
         }
+        public String GetTmax()
+        {
+            return Math.Floor(TemperatureRangeRight).ToString();
+        }
+        public String GetTmin()
+        {
+            return Math.Ceiling(TemperatureRangeLeft).ToString();
+        }
+
         double Tmax()
         {
             double res = 6000;
@@ -365,7 +380,7 @@ namespace Termo
 
 
 
-        public void Calc(double startT, double endT)
+        public int Calc(double startT, double endT) // Возвращает 0 - не ошибок, -1 - только одна скорость нагрева
         {
             ResultSignals = new List<List<Signal>>();
             alpha = new List<double>();
@@ -373,8 +388,6 @@ namespace Termo
 
             List<List<double>> alpha1 = new List<List<double>>();
             List<List<double>> TKelvin = new List<List<double>>();
-            List<List<double>> DSC1 = new List<List<double>>();
-            List<List<double>> TG1 = new List<List<double>>();
             List<List<double>> T3;
 
             double TGa, TGmin, TGb, TGmax, eps = 1.0, Tmax = 0, alMax = 0, alStep;
@@ -383,15 +396,16 @@ namespace Termo
             List<double> b = new List<double>();
             for (int i = 0; i < ModelSignals.Count; i++) b.Add(AVG.GetBetta(i));
 
+            if (b.Count == 1) return -1;
 
             int index = b.FindIndex(a => a == b.Max());
-            int Ti = 0;
-
-            while (AVG.GetSignal("T", index)[Ti] < startT) Ti++;
-            TGa = AVG.GetSignal("TG", index)[Ti];
-
-            while (AVG.GetSignal("T", index)[Ti] < endT) Ti++;
-            TGb = AVG.GetSignal("TG", index)[Ti];
+            TGa = AVG.GetSignal("TG", index)[0];
+            TGb = AVG.GetSignal("TG", index)[1];
+            for (int Ti = 0; Ti < AVG.GetSignal("T", index).Length; Ti++)
+            {
+                if (AVG.GetSignal("T", index)[Ti] < startT) TGa = AVG.GetSignal("TG", index)[Ti];
+                if (AVG.GetSignal("T", index)[Ti] < endT) TGb = AVG.GetSignal("TG", index)[Ti];
+            }
 
             bool bFlag = true;
             double minDTG = 0;
@@ -402,9 +416,6 @@ namespace Termo
 
                 List<double> alphaForSpeed = new List<double>();
                 List<double> TKelvinForSpeed = new List<double>();
-                List<double> DSCForSpeed = new List<double>();
-                List<double> TGForSpeed = new List<double>();
-
 
                 for (int j = 0; j < AVG.GetSignal("TG", i).Length; j++)
                 {
@@ -415,8 +426,7 @@ namespace Termo
                     if (al > 1) al = 1;
                     if (alphaForSpeed.Count == 0) alphaForSpeed.Add(0); else alphaForSpeed.Add(al);
                     TKelvinForSpeed.Add(AVG.GetSignal("T", i)[j] + K);
-                    TGForSpeed.Add(AVG.GetSignal("TG", i)[j]);
-                    DSCForSpeed.Add(AVG.GetSignal("DTG", i)[j]);
+
 
                     if (i == AVG.CountSpeeds() - 1)
                     {
@@ -433,8 +443,6 @@ namespace Termo
 
                 alpha1.Add(alphaForSpeed);
                 TKelvin.Add(TKelvinForSpeed);
-                TG1.Add(TGForSpeed);
-                DSC1.Add(DSCForSpeed);
             }
 
             alStep = 1.0 / (NStep);
@@ -447,17 +455,19 @@ namespace Termo
                     T[i, j + 1] = FindAl(TKelvin, alpha1, al, j);
             }
 
-            Vyazovkin(out T3, T, b, eps, 0.2, 0.8);                 
-            FindModel(T3, VyazovkinE0, Tmax, alMax, b, NStep);   
+            Vyazovkin(out T3, T, b, eps, 0.2, 0.8);                // Находим энергию активации
+            FindModel(T3, VyazovkinE0, Tmax, alMax, b, NStep);  //Находим модель процесса  
             VyazovkinE0 /= 1000;
 
             OzawaFlynnWall(T, b, 0.2, 0.8);
             FridmanMethod(T, 0.2, 0.8, 1000, 1000);
+
+            return 0;
         }
 
-         
-         
-         
+        // ---------------------------------------------------------------------------------------------
+        // Расчет по Фридмону
+        //---------------------------------------------------------------------------------------------
 
         private void FridmanMethod(double[,] T, double alA, double alB, double NamberStepT, double NamberStepAl)
         {
@@ -578,9 +588,9 @@ namespace Termo
 
 
 
-         
-         
-         
+        // ---------------------------------------------------------------------------------------------
+        // Расчет по методу Ozawa–Flynn–Wall
+        // ---------------------------------------------------------------------------------------------
 
         private void OzawaFlynnWall(double[,] T, List<double> b, double alA, double alB)
         {
@@ -638,7 +648,7 @@ namespace Termo
         }
         private void Vyazovkin(out List<List<double>> T3, double[,] T, List<double> b, double eps, double alA, double alB)
         {
-             
+            //%Нахождение минимума функционала по Вязовскому
             VyazovkinE0 = 0;
             VyazovkinE = new List<List<double>>();
             T3 = new List<List<double>>();
@@ -649,12 +659,12 @@ namespace Termo
             List<double> _ColE = new List<double>();
 
             int N = b.Count - 1;
-            double A, B, al, x, f1, f2, Step, n = 0;
+            double A, B, al, x, f1, f2, Step, n = 1;
 
             for (int j = 0; j < T.GetLength(0); j++)
             {
                 al = T[j, 0];
-                 
+                // Метод дихотомии для оптимизации
                 A = 0;
                 B = 10000000;
                 while (Math.Abs(B - A) > eps)
@@ -681,17 +691,17 @@ namespace Termo
             T3.Add(ColAl); T3.Add(ColE); T3.Add(ColT);
             VyazovkinE.Add(_ColAl); VyazovkinE.Add(_ColE);
 
-            x = 0; n = 0;
+            x = 0; n = 1;
             for (int i = 0; i < _ColE.Count; i++)
             {
                 x += (VyazovkinE0 - _ColE[i] * KK) * (VyazovkinE0 - _ColE[i] * KK);
                 n++;
             }
-            VyazovkinError = 100 * Math.Sqrt(x / (n - 1)) / VyazovkinE0;
+            VyazovkinError = 100 * Math.Sqrt(x / n) / VyazovkinE0;
         }
         private void FindModel(List<List<double>> T, double E0, double Tmax, double alMax, List<double> b, int Nsteps)
         {
-             
+            //Нахождение теоретической функции f(al)       
             List<double> al = new List<double>();
             List<double> dAl = new List<double>();
             Ycalc = new List<List<double>>();
@@ -739,13 +749,13 @@ namespace Termo
 
             for (int j = 0; j < Ycalc[1].Count; j++) Ycalc[1][j] /= Y05calc;
 
-             
+            // Подбираем А и f(альфа) для разных p,n,m
             double RSS = 0, A = 0;
             List<List<double>> ModelParam = new List<List<double>>();
 
             for (double p = 0.0; p <= 1.0; p += 1.0)
-                for (double n = 0.0; n <= 2; n += 0.15)
-                    for (double m = 1; m <= 3.0; m += 1.0)
+                for (double n = 0.0; n <= 2; n += 0.01)
+                    for (double m = 0.1; m <= 3.0; m += 0.2)
                     {
                         List<List<double>> Yt;
                         Paint(out Yt, out A, T1, E0, Tmax, alMax, m, n, p, b[b.Count - 1], tStep);
@@ -764,6 +774,7 @@ namespace Termo
                         ModelParam.Add(Row);
                     }
 
+            if (ModelParam.Count == 0) return;
             List<double> MinParam = ModelParam[0];
             for (int i = 0; i < ModelParam.Count; i++)
             {
@@ -778,9 +789,9 @@ namespace Termo
             Paint(out Yteor, out A, T1, E0, Tmax, alMax, Model_m, Model_n, Model_p, b[b.Count - 1], tStep);
 
         }
-        void Paint(out List<List<double>> Yt, out double A, double T1, double E0, double Tmax, double alMax, double m, double n, double p, double b, double TStep)     
+        void Paint(out List<List<double>> Yt, out double A, double T1, double E0, double Tmax, double alMax, double m, double n, double p, double b, double TStep)    //Рисуем найденную теоретическую функцию и экспериментальную кривую dальфа/dt
         {
-             
+            //Расчитываем Yteor
             double Ti, Y05teor, Al, x0, x1, y0, y1;
             List<double> col1 = new List<double>();
             List<double> col2 = new List<double>();
@@ -813,25 +824,25 @@ namespace Termo
             }
             for (int j = 0; j < Yt[1].Count; j++) Yt[1][j] /= Y05teor;
         }
-        double f(double m, double n, double p, double x)  
+        double f(double m, double n, double p, double x) // Функция процесса
         {
-             
-             
+            // x - альфа
+            // m,n,p - степени
             return Math.Pow(x, m) * Math.Pow(1 - x, n) * Math.Pow(-Math.Log(1 - x), p);
         }
-        double fD(double m, double n, double p, double x)                       
+        double fD(double m, double n, double p, double x)                      //Первая и последняя производная процесса
         {
-             
-             
+            // x - альфа
+            // m,n,p - степени
             return Math.Pow(x, m - 1) * Math.Pow(1 - x, n - 1) * Math.Pow(-Math.Log(1 - x), p - 1) * (Math.Log(1 - x) * (m * (x - 1) + n * x) + p * x);
         }
-        double FindA(double Tmax, double alMax, double E0, double m, double n, double p, double b)  
+        double FindA(double Tmax, double alMax, double E0, double m, double n, double p, double b) //Нахождение предэкспоненциального множителя A 
         {
-             
-             
-             
-             
-             
+            // Tmax - максимальная темпертура на рассматриваемом участке в Кельвинах, 
+            // alMax - альфа при максимальной температуре Tmax,
+            // E0 - средняя энергия активции, 
+            // m,n,p - степени модели,
+            // b - коэффициент скорость нагрева
             double R = 8.3144598;
             double f = fD(m, n, p, alMax);
             if (f == 0) return -1;
@@ -839,7 +850,7 @@ namespace Termo
         }
         double FindAl(List<List<double>> T, List<List<double>> alpha, double al, int Speed)
         {
-             
+            // Кусочно-линейная аппроксимция
             if (alpha[Speed][0] > al)
             {
                 double x0 = alpha[Speed][0];
@@ -864,8 +875,8 @@ namespace Termo
         }
         double F(double[,] T, double E, List<double> b, int t1)
         {
-             
-             
+            //Нахождение функционала Вязовского
+            //T - массив температур, E - энергия активации, b - вектор коэффициентов скоростей нагрева, t1 - соотносит с альфа
 
             double S = 0;
             for (int i = 0; i < b.Count; i++)
@@ -882,8 +893,8 @@ namespace Termo
         }
         double I(double T, double E)
         {
-             
-             
+            //Расчет значения интеграла
+            //T и E - температура и энергия активации при заданном значении альфа 
             return E * pp(T, E) / 8.3144598;
         }
         double pp(double T, double E)
@@ -891,24 +902,22 @@ namespace Termo
             double x = E / (8.3144598 * T);
             return (Math.Exp(-x) * (x * x * x + 18 * x * x + 88 * x + 96)) / (x * (x * x * x * x + 20 * x * x * x + 120 * x * x + 240 * x + 120));
         }
-
     }
-
-
 
     class AVGModel : SignalObject
     {
         Dictionary<string, int> Keys = new Dictionary<string, int>();
 
-        List<double> bGrid;  
+        List<double> bGrid; // правильные индексы для грида
 
         struct AS
         {
             public Signal[] S;
             public double Betta;
             public double T0;
+            public double Tend;
         }
-        List<AS> Signals = new List<AS>();  
+        List<AS> Signals = new List<AS>(); // по скоростям
 
 
         int TempToIndex(double T, SimpleSignal SpeedSignal)
@@ -944,12 +953,12 @@ namespace Termo
 
         void DTG()
         {
-             
+            // посчитать производную от TG по T
 
             for (int k = 0; k < Signals.Count; k++)
             {
                 for (int i = 1; i < Signals[k].S[1].array.Length - 1; i++)
-                    Signals[k].S[3].array[i] = (Signals[k].S[1].array[i] - Signals[k].S[1].array[i - 1]); 
+                    Signals[k].S[3].array[i] = (Signals[k].S[1].array[i] - Signals[k].S[1].array[i - 1]);// / (Signals[k].S[0].array[i] - Signals[k].S[0].array[i - 1]) + (Signals[k].S[1].array[i + 1] - Signals[k].S[1].array[i]) / (Signals[k].S[0].array[i + 1] - Signals[k].S[0].array[i])) * 0.5;
             }
 
         }
@@ -975,19 +984,19 @@ namespace Termo
             return Signals.Count;
         }
 
-        public AVGModel(Model InpModel, double startT, double endT)
+        public AVGModel(Model InpModel, double startT, double endT, int[] DataIndex)
         {
             Keys.Add("T", 0);
             Keys.Add("TG", 1);
             Keys.Add("DTA", 2);
             Keys.Add("DTG", 3);
 
-
             for (int i = 0; i < InpModel.Count; i++)
             {
-                int dim = 4;
+                int Dim = 4;
+
                 AS SignalForSpeed = new AS();
-                SignalForSpeed.S = new Signal[dim];
+                SignalForSpeed.S = new Signal[Dim];
 
                 List<SimpleSignal> SpeedSignal = InpModel[i];
                 int[] StartInd = new int[SpeedSignal.Count];
@@ -1012,36 +1021,39 @@ namespace Termo
                 SignalForSpeed.S[0] = new Signal(SpeedSignal[0].GetSignal("T"));
 
                 List<Functions> Mass = new List<Functions>();
-                for(int j=0;j<SpeedSignal.Count;j++)
-                    Mass.Add(new Functions(new List<double>(SpeedSignal[j].GetSignal("T")), new List<double>(SpeedSignal[j].GetSignal("Mass"))));
-                AVGFunctions AVGMass = new AVGFunctions(Mass, 0);  
-                SignalForSpeed.S[1] = AVGMass.Get(); 
-
-                List<Functions> DSC = new List<Functions>();
                 for (int j = 0; j < SpeedSignal.Count; j++)
-                    DSC.Add(new Functions(new List<double>(SpeedSignal[j].GetSignal("T")), new List<double>(SpeedSignal[j].GetSignal("DSC"))));
-                AVGFunctions AVGDSC = new AVGFunctions(DSC, 0);  
-                SignalForSpeed.S[2] = AVGDSC.Get();  
+                    Mass.Add(new Functions(new List<double>(SpeedSignal[j].GetSignal("T")), new List<double>(SpeedSignal[j].GetSignal("Mass"))));
+                AVGFunctions AVGMass = new AVGFunctions(Mass, 0); // x возьмем по первым данным, это можно исправить позже как решим                
+                SignalForSpeed.S[1] = AVGMass.Get();//;new Signal(SpeedSignal[0].GetSignal("Mass"))
 
-                SignalForSpeed.S[3] = new Signal(new double[SpeedSignal[0].GetSignal("T").Length]);
+                if (DataIndex[DataIndex.Length - 1] != -1)
+                {
+                    List<Functions> DSC = new List<Functions>();
+                    for (int j = 0; j < SpeedSignal.Count; j++)
+                        DSC.Add(new Functions(new List<double>(SpeedSignal[j].GetSignal("T")), new List<double>(SpeedSignal[j].GetSignal("DSC"))));
+                    AVGFunctions AVGDSC = new AVGFunctions(DSC, 0); // x возьмем по первым данным, это можно исправить позже как решим                
+                    SignalForSpeed.S[2] = AVGDSC.Get(); //new Signal(SpeedSignal[0].GetSignal("DSC"));
+                }
 
-                Signals.Add(SignalForSpeed);
+            SignalForSpeed.S[3] = new Signal(new double[SpeedSignal[0].GetSignal("T").Length]);
+
+            Signals.Add(SignalForSpeed);
             }
 
             bGrid = new List<double>();
             
-            for (int i = 0; i < Signals.Count; i++)
+            for (int i = 0; i<Signals.Count; i++)
             {
                 bGrid.Add(Signals[i].Betta);
             }
-   
+
 
             bool f = true;
             while (f)
             {
                 f = false;
-                for (int i = 0; i < Signals.Count - 1; i++)
-                    if (Signals[i].Betta > Signals[i+1].Betta)
+                for (int i = 0; i<Signals.Count - 1; i++)
+                    if (Signals[i].Betta > Signals[i + 1].Betta)
                     {
                         AS tmp = Signals[i];
                         Signals[i] = Signals[i + 1];
@@ -1055,81 +1067,81 @@ namespace Termo
         }
     }
 
-    class Functions  
+    class Functions // класс для интерполяции данных
+{
+    List<double> DataX;
+    List<double> DataY;
+
+    public int Len
     {
-        List<double> DataX;
-        List<double> DataY;
+        get { return DataX.Count; }
+    }
 
-        public int Len
+    public double GetX(int i)
+    {
+        return DataX[i];
+    }
+
+    public Functions(List<double> _DataX, List<double> _DataY)
+    {
+        DataX = _DataX;
+        DataY = _DataY;
+    }
+
+    public double GetLinear(double x)// Кусочно-линейная аппроксимция
+    {
+        if (DataX[0] > x)
         {
-            get { return DataX.Count; }
+            double x0 = DataX[0];
+            double y0 = DataY[0];
+            double x1 = DataX[1];
+            double y1 = DataY[1];
+            return ((x - x0) / (x1 - x0)) * (y1 - y0) + y0;
         }
 
-        public double GetX(int i)
+        for (int i = 1; i < DataX.Count; i++)
         {
-            return DataX[i];
-        }
-
-        public Functions(List<double> _DataX, List<double> _DataY)
-        {
-            DataX = _DataX;
-            DataY = _DataY;
-        }
-
-        public double GetLinear(double x) 
-        {
-            if (DataX[0] > x)
+            if ((DataX[i - 1] <= x) && (DataX[i] > x))
             {
-                double x0 = DataX[0];
-                double y0 = DataY[0];
-                double x1 = DataX[1];
-                double y1 = DataY[1];
+                double x0 = DataX[i - 1];
+                double y0 = DataY[i - 1];
+                double x1 = DataX[i];
+                double y1 = DataY[i];
                 return ((x - x0) / (x1 - x0)) * (y1 - y0) + y0;
             }
-
-            for (int i = 1; i < DataX.Count; i++)
-            {
-                if ((DataX[i - 1] <= x) && (DataX[i] > x))
-                {
-                    double x0 = DataX[i - 1];
-                    double y0 = DataY[i - 1];
-                    double x1 = DataX[i];
-                    double y1 = DataY[i];
-                    return ((x - x0) / (x1 - x0)) * (y1 - y0) + y0;
-                }
-            }
-            return DataY[DataY.Count - 1];
         }
+        return DataY[DataY.Count - 1];
     }
+}
 
 
-    class AVGFunctions  
+class AVGFunctions // класс для интерполяции данных
+{
+    List<Functions> Data;
+    int finestMesh; // набор данных с наиболее детализированной сеткой по X
+
+    public AVGFunctions(List<Functions> _Data, int refX)
     {
-        List<Functions> Data;
-        int finestMesh;  
-
-        public AVGFunctions(List<Functions> _Data, int refX)
-        {
-            Data = _Data;
-            finestMesh = refX;
-        }
-
-        public Signal Get()
-        {
-            int N = Data[finestMesh].Len;
-            double[] Arr = new double[N];
-
-            for (int i = 0; i < N; i++)
-            {
-                Arr[i] = 0;
-                double x = Data[finestMesh].GetX(i);
-                for (int j = 0; j < Data.Count; j++)
-                    Arr[i] += Data[j].GetLinear(x);
-                Arr[i] /= Data.Count;
-            }
-
-            return new Signal(Arr);
-        }
+        Data = _Data;
+        finestMesh = refX;
     }
+
+    public Signal Get()
+    {
+        int N = Data[finestMesh].Len;
+        double[] Arr = new double[N];
+
+        for (int i = 0; i < N; i++)
+        {
+            Arr[i] = 0;
+            double x = Data[finestMesh].GetX(i);
+            for (int j = 0; j < Data.Count; j++)
+                Arr[i] += Data[j].GetLinear(x);
+            Arr[i] /= Data.Count;
+        }
+
+        return new Signal(Arr);
+    }
+}
 
 }

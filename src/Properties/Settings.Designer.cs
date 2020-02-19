@@ -49,25 +49,25 @@ namespace Termo.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("44")]
-        public string LefCursorValue {
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int LefCursorPos {
             get {
-                return ((string)(this["LefCursorValue"]));
+                return ((int)(this["LefCursorPos"]));
             }
             set {
-                this["LefCursorValue"] = value;
+                this["LefCursorPos"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("100")]
-        public string RightCursorValue {
+        [global::System.Configuration.DefaultSettingValueAttribute("2047")]
+        public int RightCursorPos {
             get {
-                return ((string)(this["RightCursorValue"]));
+                return ((int)(this["RightCursorPos"]));
             }
             set {
-                this["RightCursorValue"] = value;
+                this["RightCursorPos"] = value;
             }
         }
     }
