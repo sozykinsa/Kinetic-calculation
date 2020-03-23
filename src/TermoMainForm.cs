@@ -33,6 +33,13 @@ namespace Termo
             comboBox1.Text = ConfigurationManager.AppSettings["ColumnTemperature"];
             comboBox2.Text = ConfigurationManager.AppSettings["ColumnMass"];
             comboBox4.Text = ConfigurationManager.AppSettings["ColumnDSC"];
+
+            double Tmp;
+            Double.TryParse(ConfigurationManager.AppSettings["Alpha_Min"], out Tmp);
+            textBox_Alpha_min.Text = Tmp.ToString();
+            Double.TryParse(ConfigurationManager.AppSettings["Alpha_Max"], out Tmp);
+            textBox_Alpha_max.Text = Tmp.ToString();
+
         }
 
         private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -364,6 +371,37 @@ namespace Termo
             
             ConfigurationManager.RefreshSection("appSettings");
             LoadData();
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void richTextBox4_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox_Alpha_min_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            double Alpha_Min, Alpha_Max;
+
+            var configfile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var setting = configfile.AppSettings.Settings;
+
+            if (Double.TryParse(textBox_Alpha_min.Text, out Alpha_Min) && Double.TryParse(textBox_Alpha_max.Text, out Alpha_Max))
+            {
+              setting["Alpha_Min"].Value = Alpha_Min.ToString();
+              setting["Alpha_Max"].Value = Alpha_Max.ToString();
+              configfile.Save();
+              System.Windows.Forms.MessageBox.Show("Alpha value saved successfully!", "Save", MessageBoxButtons.OK);
+            } else System.Windows.Forms.MessageBox.Show("Alpha value is not correct!", "Warning", MessageBoxButtons.OK);
         }
 
         private void exportDataToolStripMenuItem_Click(object sender, EventArgs e)

@@ -455,12 +455,16 @@ namespace Termo
                     T[i, j + 1] = FindAl(TKelvin, alpha1, al, j);
             }
 
-            Vyazovkin(out T3, T, b, eps, 0.2, 0.8);                // Находим энергию активации
+            double Alpha_Min,Alpha_Max;
+            Double.TryParse(ConfigurationManager.AppSettings["Alpha_Min"], out Alpha_Min);            
+            Double.TryParse(ConfigurationManager.AppSettings["Alpha_Max"], out Alpha_Max);
+
+            Vyazovkin(out T3, T, b, eps, Alpha_Min, Alpha_Max);                // Находим энергию активации
             FindModel(T3, VyazovkinE0, Tmax, alMax, b, NStep);  //Находим модель процесса  
             VyazovkinE0 /= 1000;
 
-            OzawaFlynnWall(T, b, 0.2, 0.8);
-            FridmanMethod(T, 0.2, 0.8, 1000, 1000);
+            OzawaFlynnWall(T, b, Alpha_Min, Alpha_Max);
+            FridmanMethod(T, Alpha_Min, Alpha_Max, 1000, 1000);
 
             return 0;
         }

@@ -205,3 +205,17 @@ D:\Dropbox\Science-sorted\Avdin\Termo\obj\Debug\Termo.csproj.CoreCompileInputs.c
 D:\Dropbox\Science-sorted\Avdin\Termo\obj\Debug\Termo.csproj.CopyComplete
 D:\Dropbox\Science-sorted\Avdin\Termo\obj\Debug\Termo.exe
 D:\Dropbox\Science-sorted\Avdin\Termo\obj\Debug\Termo.pdb
+C:\Users\serge\Downloads\Kinetic-calculation-master\src\bin\Debug\Termo.exe.config
+C:\Users\serge\Downloads\Kinetic-calculation-master\src\bin\Debug\Termo.exe
+C:\Users\serge\Downloads\Kinetic-calculation-master\src\bin\Debug\Termo.pdb
+C:\Users\serge\Downloads\Kinetic-calculation-master\src\bin\Debug\System.Web.DataVisualization.Design.dll
+C:\Users\serge\Downloads\Kinetic-calculation-master\src\bin\Debug\System.Web.DataVisualization.dll
+C:\Users\serge\Downloads\Kinetic-calculation-master\src\bin\Debug\System.Windows.Forms.DataVisualization.Design.dll
+C:\Users\serge\Downloads\Kinetic-calculation-master\src\bin\Debug\System.Windows.Forms.DataVisualization.dll
+C:\Users\serge\Downloads\Kinetic-calculation-master\src\obj\Debug\Termo.TermoMainForm.resources
+C:\Users\serge\Downloads\Kinetic-calculation-master\src\obj\Debug\Termo.Properties.Resources.resources
+C:\Users\serge\Downloads\Kinetic-calculation-master\src\obj\Debug\Termo.csproj.GenerateResource.cache
+C:\Users\serge\Downloads\Kinetic-calculation-master\src\obj\Debug\Termo.csproj.CoreCompileInputs.cache
+C:\Users\serge\Downloads\Kinetic-calculation-master\src\obj\Debug\Termo.csproj.CopyComplete
+C:\Users\serge\Downloads\Kinetic-calculation-master\src\obj\Debug\Termo.exe
+C:\Users\serge\Downloads\Kinetic-calculation-master\src\obj\Debug\Termo.pdb
