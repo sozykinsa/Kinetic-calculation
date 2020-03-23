@@ -1,7 +1,6 @@
 # Kinetic calculation
 
 Thank you for your interest in our program.
-You can also download the executable file of the "Kinetic Calculation" program from the link https://ietn.susu.ru/kinetic_calculation.
 
 The program Kinetic calculation allows to calculate kinetic triplets for thermogravimetric analysis by Vyazovkin and Ozava-Flinn-Wall methods.
 
