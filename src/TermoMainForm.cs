@@ -34,12 +34,80 @@ namespace Termo
             comboBox2.Text = ConfigurationManager.AppSettings["ColumnMass"];
             comboBox4.Text = ConfigurationManager.AppSettings["ColumnDSC"];
 
+            string strAlpha_Min = ConfigurationManager.AppSettings["Alpha_Min"];
+            string strAlpha_Max = ConfigurationManager.AppSettings["Alpha_Max"];
             double Tmp;
-            Double.TryParse(ConfigurationManager.AppSettings["Alpha_Min"], out Tmp);
-            textBox_Alpha_min.Text = Tmp.ToString();
-            Double.TryParse(ConfigurationManager.AppSettings["Alpha_Max"], out Tmp);
-            textBox_Alpha_max.Text = Tmp.ToString();
 
+            if (!Double.TryParse(ConfigurationManager.AppSettings["Alpha_Min"], out Tmp))
+            {
+                if (strAlpha_Min.Contains("."))
+                {
+                    strAlpha_Min = strAlpha_Min.Replace(".", ",");
+                    strAlpha_Max = strAlpha_Max.Replace(".", ",");
+                } else
+                {
+                    strAlpha_Min = strAlpha_Min.Replace(",", ".");
+                    strAlpha_Max = strAlpha_Max.Replace(",", ".");
+                }
+
+                var configfile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                var setting = configfile.AppSettings.Settings;
+
+                setting["Alpha_Min"].Value = strAlpha_Min;
+                setting["Alpha_Max"].Value = strAlpha_Max;
+
+                configfile.Save();
+                ConfigurationManager.RefreshSection("appSettings");
+            }
+            textBox_Alpha_min.Text = strAlpha_Min;
+            textBox_Alpha_max.Text = strAlpha_Max;
+
+            string TemperatureRangeLeft = ConfigurationManager.AppSettings["TemperatureRangeLeft"];
+            string TemperatureRangeRight = ConfigurationManager.AppSettings["TemperatureRangeRight"];
+
+            if (!Double.TryParse(ConfigurationManager.AppSettings["TemperatureRangeLeft"], out Tmp))
+            {
+                if (TemperatureRangeLeft.Contains("."))
+                {
+                    TemperatureRangeLeft = TemperatureRangeLeft.Replace(".", ",");
+                }
+                else
+                {
+                    TemperatureRangeLeft = TemperatureRangeLeft.Replace(",", ".");
+                }
+
+                var configfile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                var setting = configfile.AppSettings.Settings;
+
+                setting["TemperatureRangeLeft"].Value = TemperatureRangeLeft.ToString();
+
+                configfile.Save();
+                ConfigurationManager.RefreshSection("appSettings");
+            }
+
+            if (!Double.TryParse(ConfigurationManager.AppSettings["TemperatureRangeRight"], out Tmp))
+            {
+                if (TemperatureRangeLeft.Contains("."))
+                {
+                    TemperatureRangeRight = TemperatureRangeRight.Replace(".", ",");
+                }
+                else
+                {
+                    TemperatureRangeRight = TemperatureRangeRight.Replace(",", ".");
+                }
+
+                var configfile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                var setting = configfile.AppSettings.Settings;
+
+                setting["TemperatureRangeRight"].Value = TemperatureRangeRight.ToString();
+
+                configfile.Save();
+                ConfigurationManager.RefreshSection("appSettings");
+            }
+
+            lTemperatureRangeLeft.Text = TemperatureRangeLeft;
+            lTemperatureRangeRight.Text = TemperatureRangeRight;
+            
         }
 
         private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -95,6 +163,7 @@ namespace Termo
             double k = (TGXmax - TGXmin) / (TGPixelmax - TGPixelmin);
             Pos = k * (panel2.Location.X + panel2.Width / 2 - TGPixelmin) + TGXmin;
             lTemperatureRangeLeft.Text = Math.Round(Pos, 2).ToString();
+            save_temperature_range();
         }
 
 
@@ -113,6 +182,7 @@ namespace Termo
             double k = (TGXmax - TGXmin) / (TGPixelmax - TGPixelmin);
             Pos = k * (panel3.Location.X + panel3.Width / 2 - TGPixelmin) + TGXmin;
             lTemperatureRangeRight.Text = Math.Round(Pos, 2).ToString();
+            save_temperature_range();
         }
 
         private void button8_Click(object sender, EventArgs e)
@@ -373,35 +443,114 @@ namespace Termo
             LoadData();
         }
 
-        private void richTextBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void richTextBox4_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox_Alpha_min_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             double Alpha_Min, Alpha_Max;
 
-            var configfile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            var setting = configfile.AppSettings.Settings;
-
             if (Double.TryParse(textBox_Alpha_min.Text, out Alpha_Min) && Double.TryParse(textBox_Alpha_max.Text, out Alpha_Max))
             {
+              if (Alpha_Min<0 || Alpha_Max>1)
+                {
+                    System.Windows.Forms.MessageBox.Show("Alpha value must be no less than zero and no more than one!", "Error", MessageBoxButtons.OK);
+                    return;
+                }
+              if (Alpha_Min >= Alpha_Max)
+                {
+                    System.Windows.Forms.MessageBox.Show("The minimum alpha value must be strictly less than the maximum value!", "Error", MessageBoxButtons.OK);
+                    return;
+                }
+
+              var configfile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+              var setting = configfile.AppSettings.Settings;
               setting["Alpha_Min"].Value = Alpha_Min.ToString();
               setting["Alpha_Max"].Value = Alpha_Max.ToString();
               configfile.Save();
-              System.Windows.Forms.MessageBox.Show("Alpha value saved successfully!", "Save", MessageBoxButtons.OK);
+              ConfigurationManager.RefreshSection("appSettings");
+                System.Windows.Forms.MessageBox.Show("Alpha value saved successfully!", "Save", MessageBoxButtons.OK);
             } else System.Windows.Forms.MessageBox.Show("Alpha value is not correct!", "Warning", MessageBoxButtons.OK);
+        }
+
+        private void panel3_MouseUp(object sender, MouseEventArgs e)
+        {
+            isRightReperMoove = false;
+        }
+
+        private bool save_temperature_range()
+        {
+            double TemperatureRangeLeft, TemperatureRangeRight;
+            string strTemperatureRangeLeft = lTemperatureRangeLeft.Text;
+            string strTemperatureRangeRight = lTemperatureRangeRight.Text;
+
+            if (!(Double.TryParse(strTemperatureRangeLeft, out TemperatureRangeLeft) ))
+            {
+                if (strTemperatureRangeLeft.Contains("."))
+                {
+                    strTemperatureRangeLeft = strTemperatureRangeLeft.Replace(".", ",");
+                }
+                else
+                {
+                    strTemperatureRangeLeft = strTemperatureRangeLeft.Replace(",", ".");
+                }
+            }
+
+            if (!(Double.TryParse(strTemperatureRangeRight, out TemperatureRangeRight)))
+            {
+                if (strTemperatureRangeRight.Contains("."))
+                {
+                    strTemperatureRangeRight = strTemperatureRangeRight.Replace(".", ",");
+                }
+                else
+                {
+                    strTemperatureRangeRight = strTemperatureRangeRight.Replace(",", ".");
+                }
+            }
+
+            if (Double.TryParse(strTemperatureRangeLeft, out TemperatureRangeLeft) && Double.TryParse(strTemperatureRangeRight, out TemperatureRangeRight))
+            {
+                /*TGXmin = TermoModel.TminPlot();
+                TGXmax = TermoModel.TmaxPlot();
+                TGPixelmin = plot1chart.ChartAreas[0].AxisX.ValueToPixelPosition(Convert.ToDouble(TGXmin));
+                TGPixelmax = plot1chart.ChartAreas[0].AxisX.ValueToPixelPosition(Convert.ToDouble(TGXmax));
+                if (TemperatureRangeLeft < TGPixelmin || TemperatureRangeRight > TGPixelmax)
+                {
+                    System.Windows.Forms.MessageBox.Show("Temperature value must be in experimental data range!", "Error", MessageBoxButtons.OK);
+                    return;
+                }*/
+                if (TemperatureRangeRight <= TemperatureRangeLeft)
+                {
+                    System.Windows.Forms.MessageBox.Show("The minimum temperature value must be strictly less than the maximum value!", "Error", MessageBoxButtons.OK);
+                    double k = (TGXmax - TGXmin) / (TGPixelmax - TGPixelmin);
+                    lTemperatureRangeLeft.Text = Math.Round(k * (panel2.Location.X + panel2.Width / 2 - TGPixelmin) + TGXmin, 2).ToString();
+                    lTemperatureRangeRight.Text = Math.Round(k * (panel3.Location.X + panel3.Width / 2 - TGPixelmin) + TGXmin, 2).ToString();
+                    return false;
+                }
+                else
+                {
+                    double k = (TGXmax - TGXmin) / (TGPixelmax - TGPixelmin);
+                    panel2.Location = new Point(Convert.ToInt32((Convert.ToDouble(strTemperatureRangeLeft) - TGXmin) / k - panel2.Width / 2 + TGPixelmin), panel2.Location.Y);
+                    panel3.Location = new Point(Convert.ToInt32((Convert.ToDouble(strTemperatureRangeRight) - TGXmin) / k - panel3.Width / 2 + TGPixelmin), panel3.Location.Y);
+                }
+
+                var configfile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                var setting = configfile.AppSettings.Settings;
+                setting["TemperatureRangeLeft"].Value = strTemperatureRangeLeft;
+                setting["TemperatureRangeRight"].Value = strTemperatureRangeRight;
+                configfile.Save();
+                ConfigurationManager.RefreshSection("appSettings");
+                lTemperatureRangeLeft.Text = strTemperatureRangeLeft;
+                lTemperatureRangeRight.Text = strTemperatureRangeRight;
+                return true;
+            }
+            else
+            {
+                System.Windows.Forms.MessageBox.Show("Temperature range  is not correct!", "Warning", MessageBoxButtons.OK);
+                return false;
+            }
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            if (save_temperature_range()) System.Windows.Forms.MessageBox.Show("Temperature range setted successfully!", "Set", MessageBoxButtons.OK);
         }
 
         private void exportDataToolStripMenuItem_Click(object sender, EventArgs e)
@@ -415,11 +564,11 @@ namespace Termo
             TGXmax = TermoModel.TmaxPlot();
             TGPixelmin = plot1chart.ChartAreas[0].AxisX.ValueToPixelPosition(Convert.ToDouble(TGXmin));
             TGPixelmax = plot1chart.ChartAreas[0].AxisX.ValueToPixelPosition(Convert.ToDouble(TGXmax));
-
-            int PosX1 = (int)plot1chart.ChartAreas[0].AxisX.ValueToPixelPosition(Convert.ToDouble(lTemperatureRangeLeft.Text));
+            String strj = ConfigurationManager.AppSettings["TemperatureRangeLeft"];
+            int PosX1 = (int)plot1chart.ChartAreas[0].AxisX.ValueToPixelPosition(Convert.ToDouble(ConfigurationManager.AppSettings["TemperatureRangeLeft"]));
             panel2.Location = new Point(PosX1, panel2.Location.Y);
-
-            int PosX2 = (int)plot1chart.ChartAreas[0].AxisX.ValueToPixelPosition(Convert.ToDouble(lTemperatureRangeRight.Text));
+            strj = ConfigurationManager.AppSettings["TemperatureRangeRight"];
+            int PosX2 = (int)plot1chart.ChartAreas[0].AxisX.ValueToPixelPosition(Convert.ToDouble(ConfigurationManager.AppSettings["TemperatureRangeRight"]));
             panel3.Location = new Point(PosX2, panel3.Location.Y);
         }
 

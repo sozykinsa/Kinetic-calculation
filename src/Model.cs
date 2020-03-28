@@ -455,7 +455,12 @@ namespace Termo
                     T[i, j + 1] = FindAl(TKelvin, alpha1, al, j);
             }
 
-            double Alpha_Min,Alpha_Max;
+           
+            string sAlpha_Min = ConfigurationManager.AppSettings["Alpha_Min"];
+            string sAlpha_Max = ConfigurationManager.AppSettings["Alpha_Max"];
+            double Alpha_Min = Convert.ToDouble(sAlpha_Min);
+            double Alpha_Max = Convert.ToDouble(sAlpha_Max);
+
             Double.TryParse(ConfigurationManager.AppSettings["Alpha_Min"], out Alpha_Min);            
             Double.TryParse(ConfigurationManager.AppSettings["Alpha_Max"], out Alpha_Max);
 
@@ -553,7 +558,7 @@ namespace Termo
 
             if (fs == null) return;
 
-            CultureInfo culture = new CultureInfo("en-us");
+          //  CultureInfo culture = new CultureInfo("en-us");
             using (StreamWriter streamWriter = new StreamWriter(fs, Encoding.ASCII))
             {
                 streamWriter.WriteLineAsync(title);
@@ -574,9 +579,10 @@ namespace Termo
             Data.Add(VyazovkinE[0]);
             Data.Add(VyazovkinE[1]);
             Data.Add(OzawaE[1]);
-            Data.Add(FridmanE[1]);
+            // Data.Add(FridmanE[1]);
 
-            SaveDataToFile(SaveFile, Data, "alpha \t VyazovkinE \t OzawaE \t FridmanE");
+//            SaveDataToFile(SaveFile, Data, "alpha \t VyazovkinE \t OzawaE \t FridmanE");
+            SaveDataToFile(SaveFile, Data, "alpha \t VyazovkinE \t OzawaE");
         }
 
 

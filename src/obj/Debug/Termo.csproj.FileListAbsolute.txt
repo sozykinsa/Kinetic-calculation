@@ -219,3 +219,17 @@ C:\Users\serge\Downloads\Kinetic-calculation-master\src\obj\Debug\Termo.csproj.C
 C:\Users\serge\Downloads\Kinetic-calculation-master\src\obj\Debug\Termo.csproj.CopyComplete
 C:\Users\serge\Downloads\Kinetic-calculation-master\src\obj\Debug\Termo.exe
 C:\Users\serge\Downloads\Kinetic-calculation-master\src\obj\Debug\Termo.pdb
+D:\Дима\Проект Термический Анализ Авдин В.В\Программа\Kinetic-calculation-master\src\bin\Debug\Termo.exe.config
+D:\Дима\Проект Термический Анализ Авдин В.В\Программа\Kinetic-calculation-master\src\bin\Debug\Termo.exe
+D:\Дима\Проект Термический Анализ Авдин В.В\Программа\Kinetic-calculation-master\src\bin\Debug\Termo.pdb
+D:\Дима\Проект Термический Анализ Авдин В.В\Программа\Kinetic-calculation-master\src\bin\Debug\System.Web.DataVisualization.Design.dll
+D:\Дима\Проект Термический Анализ Авдин В.В\Программа\Kinetic-calculation-master\src\bin\Debug\System.Web.DataVisualization.dll
+D:\Дима\Проект Термический Анализ Авдин В.В\Программа\Kinetic-calculation-master\src\bin\Debug\System.Windows.Forms.DataVisualization.Design.dll
+D:\Дима\Проект Термический Анализ Авдин В.В\Программа\Kinetic-calculation-master\src\bin\Debug\System.Windows.Forms.DataVisualization.dll
+D:\Дима\Проект Термический Анализ Авдин В.В\Программа\Kinetic-calculation-master\src\obj\Debug\Termo.TermoMainForm.resources
+D:\Дима\Проект Термический Анализ Авдин В.В\Программа\Kinetic-calculation-master\src\obj\Debug\Termo.Properties.Resources.resources
+D:\Дима\Проект Термический Анализ Авдин В.В\Программа\Kinetic-calculation-master\src\obj\Debug\Termo.csproj.GenerateResource.cache
+D:\Дима\Проект Термический Анализ Авдин В.В\Программа\Kinetic-calculation-master\src\obj\Debug\Termo.csproj.CoreCompileInputs.cache
+D:\Дима\Проект Термический Анализ Авдин В.В\Программа\Kinetic-calculation-master\src\obj\Debug\Termo.csproj.CopyComplete
+D:\Дима\Проект Термический Анализ Авдин В.В\Программа\Kinetic-calculation-master\src\obj\Debug\Termo.exe
+D:\Дима\Проект Термический Анализ Авдин В.В\Программа\Kinetic-calculation-master\src\obj\Debug\Termo.pdb
