@@ -25,6 +25,8 @@ namespace Termo
         double TGXmin, TGXmax, TGPixelmin, TGPixelmax, X0;
         int[] DataIndex = new int[4];
 
+        double TemperatureRangeLeft;
+        double TemperatureRangeRight;
 
         public TermoMainForm()
         {
@@ -59,55 +61,9 @@ namespace Termo
                 configfile.Save();
                 ConfigurationManager.RefreshSection("appSettings");
             }
+
             textBox_Alpha_min.Text = strAlpha_Min;
-            textBox_Alpha_max.Text = strAlpha_Max;
-
-            string TemperatureRangeLeft = ConfigurationManager.AppSettings["TemperatureRangeLeft"];
-            string TemperatureRangeRight = ConfigurationManager.AppSettings["TemperatureRangeRight"];
-
-            if (!Double.TryParse(ConfigurationManager.AppSettings["TemperatureRangeLeft"], out Tmp))
-            {
-                if (TemperatureRangeLeft.Contains("."))
-                {
-                    TemperatureRangeLeft = TemperatureRangeLeft.Replace(".", ",");
-                }
-                else
-                {
-                    TemperatureRangeLeft = TemperatureRangeLeft.Replace(",", ".");
-                }
-
-                var configfile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                var setting = configfile.AppSettings.Settings;
-
-                setting["TemperatureRangeLeft"].Value = TemperatureRangeLeft.ToString();
-
-                configfile.Save();
-                ConfigurationManager.RefreshSection("appSettings");
-            }
-
-            if (!Double.TryParse(ConfigurationManager.AppSettings["TemperatureRangeRight"], out Tmp))
-            {
-                if (TemperatureRangeLeft.Contains("."))
-                {
-                    TemperatureRangeRight = TemperatureRangeRight.Replace(".", ",");
-                }
-                else
-                {
-                    TemperatureRangeRight = TemperatureRangeRight.Replace(",", ".");
-                }
-
-                var configfile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                var setting = configfile.AppSettings.Settings;
-
-                setting["TemperatureRangeRight"].Value = TemperatureRangeRight.ToString();
-
-                configfile.Save();
-                ConfigurationManager.RefreshSection("appSettings");
-            }
-
-            lTemperatureRangeLeft.Text = TemperatureRangeLeft;
-            lTemperatureRangeRight.Text = TemperatureRangeRight;
-            
+            textBox_Alpha_max.Text = strAlpha_Max;            
         }
 
         private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -141,8 +97,6 @@ namespace Termo
             tabControl1.SelectedIndex++;
         }
 
-
-
         double[,] IntScale = new double[3, 4];
         bool isLeftReperMoove = false;
         bool isRightReperMoove = false;
@@ -154,16 +108,16 @@ namespace Termo
             if (!isLeftReperMoove) return;
 
             if ((panel2.Location.X > panel3.Location.X - 10)&&(e.Location.X - (int)X0 > 0))  return;
-
             if ((panel2.Location.X > TGPixelmax - panel2.Width) && (e.Location.X - (int)X0 > 0)) return;
             if ((panel2.Location.X < TGPixelmin + panel2.Width) && (e.Location.X - (int)X0 < 0)) return;
 
-
             panel2.Location = new Point(panel2.Location.X + e.Location.X - (int)X0, panel2.Location.Y);
-            double k = (TGXmax - TGXmin) / (TGPixelmax - TGPixelmin);
-            Pos = k * (panel2.Location.X + panel2.Width / 2 - TGPixelmin) + TGXmin;
+            Pos = plot1chart.ChartAreas[0].AxisX.PixelPositionToValue(panel2.Location.X);
+            //double k = (TGXmax - TGXmin) / (TGPixelmax - TGPixelmin);
+            //Pos = k * (panel2.Location.X + panel2.Width / 2 - TGPixelmin) + TGXmin;
             lTemperatureRangeLeft.Text = Math.Round(Pos, 2).ToString();
-            save_temperature_range();
+            TemperatureRangeLeft = Pos;
+            //save_temperature_range();
         }
 
 
@@ -173,22 +127,22 @@ namespace Termo
             if (!isRightReperMoove) return;
 
             if ((panel2.Location.X > panel3.Location.X - 10) && (e.Location.X - (int)X0 < 0))  return;
-
-            if ((panel3.Location.X > TGPixelmax - panel3.Width) && (e.Location.X - (int)X0 > 0))
-                return;
-            if((panel3.Location.X < TGPixelmin - panel3.Width) && (e.Location.X - (int)X0 < 0))  return;
+            if ((panel3.Location.X > TGPixelmax - panel3.Width) && (e.Location.X - (int)X0 > 0)) return;
+            if ((panel3.Location.X < TGPixelmin - panel3.Width) && (e.Location.X - (int)X0 < 0))  return;
 
             panel3.Location = new Point(panel3.Location.X + e.Location.X - (int)X0, panel3.Location.Y);
-            double k = (TGXmax - TGXmin) / (TGPixelmax - TGPixelmin);
-            Pos = k * (panel3.Location.X + panel3.Width / 2 - TGPixelmin) + TGXmin;
+            Pos = plot1chart.ChartAreas[0].AxisX.PixelPositionToValue(panel3.Location.X);
+            //double k = (TGXmax - TGXmin) / (TGPixelmax - TGPixelmin);
+            //Pos = k * (panel3.Location.X + panel3.Width / 2 - TGPixelmin) + TGXmin;
             lTemperatureRangeRight.Text = Math.Round(Pos, 2).ToString();
-            save_temperature_range();
+            TemperatureRangeRight = Pos;
+            //save_temperature_range();
         }
 
         private void button8_Click(object sender, EventArgs e)
         {
-            double startT = Convert.ToDouble(lTemperatureRangeLeft.Text);
-            double endT = Convert.ToDouble(lTemperatureRangeRight.Text);
+            double startT = TemperatureRangeLeft;
+            double endT = TemperatureRangeRight;
 
             if (TermoModel == null)
             {
@@ -269,16 +223,14 @@ namespace Termo
                 grInitData.Columns[i].HeaderText = Math.Round(Betta[i], 2).ToString() + "\t K/min";
 
             TermoModel.plotTG_DTG_DTF(DataIndex);
-
-            lTemperatureRangeLeft.Text = TermoModel.GetTmin();
-            lTemperatureRangeRight.Text = TermoModel.GetTmax();
+            TemperatureRangeLeft = TermoModel.TminPlot();
+            TemperatureRangeRight = TermoModel.TmaxPlot();
+            lTemperatureRangeLeft.Text = TermoModel.TminPlot().ToString();
+            lTemperatureRangeRight.Text = TermoModel.TmaxPlot().ToString();
             bNext.Enabled = true;
-           // tabPageAboutProgram.Parent = null;
             if (tabPage3.Parent != tabControl1)
                 tabControl1.TabPages.Insert(1, tabPage3);
-          //  tabPageAboutProgram.Parent = tabControl1;
-
-            Application.DoEvents();
+            Application.DoEvents();            
         }
         
         public void clearAllToolStripMenuItem_Click(object sender, EventArgs e)
@@ -477,11 +429,11 @@ namespace Termo
 
         private bool save_temperature_range()
         {
-            double TemperatureRangeLeft, TemperatureRangeRight;
+            double tmpTemperatureRangeLeft, tmpTemperatureRangeRight;
             string strTemperatureRangeLeft = lTemperatureRangeLeft.Text;
             string strTemperatureRangeRight = lTemperatureRangeRight.Text;
 
-            if (!(Double.TryParse(strTemperatureRangeLeft, out TemperatureRangeLeft) ))
+            if (!(Double.TryParse(strTemperatureRangeLeft, out tmpTemperatureRangeLeft) ))
             {
                 if (strTemperatureRangeLeft.Contains("."))
                 {
@@ -493,7 +445,7 @@ namespace Termo
                 }
             }
 
-            if (!(Double.TryParse(strTemperatureRangeRight, out TemperatureRangeRight)))
+            if (!(Double.TryParse(strTemperatureRangeRight, out tmpTemperatureRangeRight)))
             {
                 if (strTemperatureRangeRight.Contains("."))
                 {
@@ -505,23 +457,21 @@ namespace Termo
                 }
             }
 
-            if (Double.TryParse(strTemperatureRangeLeft, out TemperatureRangeLeft) && Double.TryParse(strTemperatureRangeRight, out TemperatureRangeRight))
+            if (Double.TryParse(strTemperatureRangeLeft, out tmpTemperatureRangeLeft) && Double.TryParse(strTemperatureRangeRight, out tmpTemperatureRangeRight))
             {
-                /*TGXmin = TermoModel.TminPlot();
+                TGXmin = TermoModel.TminPlot();
                 TGXmax = TermoModel.TmaxPlot();
-                TGPixelmin = plot1chart.ChartAreas[0].AxisX.ValueToPixelPosition(Convert.ToDouble(TGXmin));
-                TGPixelmax = plot1chart.ChartAreas[0].AxisX.ValueToPixelPosition(Convert.ToDouble(TGXmax));
-                if (TemperatureRangeLeft < TGPixelmin || TemperatureRangeRight > TGPixelmax)
+                if (tmpTemperatureRangeLeft < TGXmin || tmpTemperatureRangeRight > TGXmax)
                 {
                     System.Windows.Forms.MessageBox.Show("Temperature value must be in experimental data range!", "Error", MessageBoxButtons.OK);
-                    return;
-                }*/
-                if (TemperatureRangeRight <= TemperatureRangeLeft)
+                    return false;
+                }
+                if (tmpTemperatureRangeRight <= tmpTemperatureRangeLeft)
                 {
                     System.Windows.Forms.MessageBox.Show("The minimum temperature value must be strictly less than the maximum value!", "Error", MessageBoxButtons.OK);
                     double k = (TGXmax - TGXmin) / (TGPixelmax - TGPixelmin);
-                    lTemperatureRangeLeft.Text = Math.Round(k * (panel2.Location.X + panel2.Width / 2 - TGPixelmin) + TGXmin, 2).ToString();
-                    lTemperatureRangeRight.Text = Math.Round(k * (panel3.Location.X + panel3.Width / 2 - TGPixelmin) + TGXmin, 2).ToString();
+                    lTemperatureRangeLeft.Text = (plot1chart.ChartAreas[0].AxisX.PixelPositionToValue(panel2.Location.X)).ToString();
+                    lTemperatureRangeRight.Text = (plot1chart.ChartAreas[0].AxisX.PixelPositionToValue(panel3.Location.X)).ToString();
                     return false;
                 }
                 else
@@ -529,14 +479,11 @@ namespace Termo
                     double k = (TGXmax - TGXmin) / (TGPixelmax - TGPixelmin);
                     panel2.Location = new Point(Convert.ToInt32((Convert.ToDouble(strTemperatureRangeLeft) - TGXmin) / k - panel2.Width / 2 + TGPixelmin), panel2.Location.Y);
                     panel3.Location = new Point(Convert.ToInt32((Convert.ToDouble(strTemperatureRangeRight) - TGXmin) / k - panel3.Width / 2 + TGPixelmin), panel3.Location.Y);
+
+                    TemperatureRangeLeft = tmpTemperatureRangeLeft;
+                    TemperatureRangeRight = tmpTemperatureRangeRight;
                 }
 
-                var configfile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                var setting = configfile.AppSettings.Settings;
-                setting["TemperatureRangeLeft"].Value = strTemperatureRangeLeft;
-                setting["TemperatureRangeRight"].Value = strTemperatureRangeRight;
-                configfile.Save();
-                ConfigurationManager.RefreshSection("appSettings");
                 lTemperatureRangeLeft.Text = strTemperatureRangeLeft;
                 lTemperatureRangeRight.Text = strTemperatureRangeRight;
                 return true;
@@ -560,16 +507,21 @@ namespace Termo
 
         private void plot1chart_Paint(object sender, PaintEventArgs e)
         {
-            TGXmin = TermoModel.TminPlot(); 
-            TGXmax = TermoModel.TmaxPlot();
-            TGPixelmin = plot1chart.ChartAreas[0].AxisX.ValueToPixelPosition(Convert.ToDouble(TGXmin));
-            TGPixelmax = plot1chart.ChartAreas[0].AxisX.ValueToPixelPosition(Convert.ToDouble(TGXmax));
-            String strj = ConfigurationManager.AppSettings["TemperatureRangeLeft"];
-            int PosX1 = (int)plot1chart.ChartAreas[0].AxisX.ValueToPixelPosition(Convert.ToDouble(ConfigurationManager.AppSettings["TemperatureRangeLeft"]));
-            panel2.Location = new Point(PosX1, panel2.Location.Y);
-            strj = ConfigurationManager.AppSettings["TemperatureRangeRight"];
-            int PosX2 = (int)plot1chart.ChartAreas[0].AxisX.ValueToPixelPosition(Convert.ToDouble(ConfigurationManager.AppSettings["TemperatureRangeRight"]));
-            panel3.Location = new Point(PosX2, panel3.Location.Y);
+            if (TermoModel != null)
+            {
+                TGXmin = TermoModel.TminPlot();
+                TGXmax = TermoModel.TmaxPlot();
+                TGPixelmin = plot1chart.ChartAreas[0].AxisX.ValueToPixelPosition(Convert.ToDouble(TGXmin));
+                TGPixelmax = plot1chart.ChartAreas[0].AxisX.ValueToPixelPosition(Convert.ToDouble(TGXmax));
+                String strj = TemperatureRangeLeft.ToString();
+                int PosX1 = (int)plot1chart.ChartAreas[0].AxisX.ValueToPixelPosition(TemperatureRangeLeft);
+                //panel2.Location = new Point((int)TGPixelmin, panel2.Location.Y);
+                panel2.Location = new Point(PosX1, panel2.Location.Y);
+                strj = TemperatureRangeRight.ToString();
+                int PosX2 = (int)plot1chart.ChartAreas[0].AxisX.ValueToPixelPosition(TemperatureRangeRight);
+                //panel3.Location = new Point((int)TGPixelmax, panel3.Location.Y);
+                panel3.Location = new Point(PosX2, panel3.Location.Y);
+            }
         }
 
         private void panel2_MouseDown(object sender, MouseEventArgs e)
