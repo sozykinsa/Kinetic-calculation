@@ -27,8 +27,11 @@ On the "Calculation" tab, two vertical lines are displayed on the left figures. 
 the calculation is performed. Lines can be moved with the mouse.
 
 The program allows you to export the calculation results in graphical format and in numerical data.
-The export menu is called up with the right mouse button in the area of ​​the graph of the result 
+The export menu is called up with the right mouse button in the area of the graph of the result 
 (two graphs on the right part of the "Calculation" tab).
+
+02/26/2020 Added function to settings the input file
+03/30/2020 Added the function of setting the alpha range and the function of setting the temperature range
 
 
 We would be grateful for feedback on program "Kinetic Calculation".
