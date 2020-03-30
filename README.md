@@ -31,6 +31,7 @@ The export menu is called up with the right mouse button in the area of the grap
 (two graphs on the right part of the "Calculation" tab).
 
 02/26/2020 Added function to settings the input file
+
 03/30/2020 Added the function of setting the alpha range and the function of setting the temperature range
 
 
