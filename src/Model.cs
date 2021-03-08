@@ -278,6 +278,16 @@ namespace Termo
         }
         public string GetVyazovkinA()
         {
+            if ((VyazovkinA / 1E10) > 1)
+                return Math.Round(VyazovkinA / 1E10, 2).ToString() + "E10";
+            if ((VyazovkinA / 1E8) > 1)
+                return Math.Round(VyazovkinA / 1E8, 2).ToString() + "E8";
+            if ((VyazovkinA / 1E6) > 1)
+                return Math.Round(VyazovkinA / 1E6, 2).ToString() + "E6";
+            if ((VyazovkinA / 1E4) > 1)
+                return Math.Round(VyazovkinA / 1E4, 2).ToString() + "E4";
+            if ((VyazovkinA / 1E2) > 1)
+                return Math.Round(VyazovkinA / 1E2, 2).ToString() + "E2";
             return Math.Round(VyazovkinA, 2).ToString();
         }
         public string Getn()
@@ -791,7 +801,7 @@ namespace Termo
                 if (MinParam[0] > ModelParam[i][0]) MinParam = ModelParam[i];
             }
             A = MinParam[1];
-            VyazovkinA = A / 1e10;
+            VyazovkinA = A;
             Model_n = MinParam[2];
             Model_m = MinParam[3];
             Model_p = MinParam[4];
